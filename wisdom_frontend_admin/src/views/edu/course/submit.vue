@@ -41,7 +41,7 @@
           type="primary"
           @click="submit"
           style="margin-left: 50px; padding: 12px"
-          >发布</el-button
+          >发布课程</el-button
         >
       </el-form-item>
     </el-form>

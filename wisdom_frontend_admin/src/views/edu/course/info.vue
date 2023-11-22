@@ -72,39 +72,13 @@
       </el-form-item>
       <el-form-item label="课程封面：">
         <el-upload
-          action="#"
-          list-type="picture-card"
-          :auto-upload="false"
-          :limit="1"
-          :on-change="uploadFile"
-          v-model="eduCourseInfo.cover"
-        >
-          <i v-if="eduCourseInfo.cover == ''" slot="default" class="el-icon-plus"></i>
-          <img v-else :src="eduCourseInfo.cover" alt="" style="width: 100%; height: 100%;">
-          <!-- <div slot="file" slot-scope="{ file }">
-            <img class="el-upload-list__item-thumbnail" :src="file.url" />
-            <span class="el-upload-list__item-actions">
-              <span
-                class="el-upload-list__item-preview"
-                @click="handlePictureCardPreview(file)"
-              >
-                <i class="el-icon-zoom-in"></i>
-              </span>
-              <span
-                v-if="!disabled"
-                class="el-upload-list__item-delete"
-                @click="handleDownload(file)"
-              >
-                <i class="el-icon-download"></i>
-              </span>
-              <span
-                class="el-upload-list__item-delete"
-                @click="handleRemove(file)"
-              >
-                <i class="el-icon-delete"></i>
-              </span>
-            </span>
-          </div> -->
+          class="avatar-uploader"
+          action="http://localhost:8099/oss/upload"
+          :show-file-list="false"
+          :on-success="handleAvatarSuccess"
+          :before-upload="beforeAvatarUpload">
+          <img v-if="eduCourseInfo.cover" :src="eduCourseInfo.cover" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="eduCourseInfo.cover" alt="" />
@@ -131,7 +105,7 @@
           type="primary"
           @click="submit"
           style="margin-left: 50px; padding: 12px"
-          >发布</el-button
+          >发布课程</el-button
         >
       </el-form-item>
     </el-form>
@@ -211,16 +185,6 @@ export default {
           this.eduCourseInfo = result.data;
         });
     },
-    handleRemove(file) {
-      file.url = '';
-    },
-    handlePictureCardPreview(file) {
-      this.eduCourseInfo.cover = file.url;
-      this.dialogVisible = true;
-    },
-    handleDownload(file) {
-      console.log(file);
-    },
     oneChanged(value) {
       for (var i = 0; i < this.eduSubjectOneList.length; i++) {
         var eduSubjectOne = this.eduSubjectOneList[i];
@@ -230,9 +194,45 @@ export default {
         }
       }
     },
-    uploadFile(file) {
-      this.eduCourseInfo.cover = file.url;
+    handleAvatarSuccess(res, file) {
+      this.eduCourseInfo.cover = res.data;
+    },
+    beforeAvatarUpload(file) {
+      const isJpgPng = file.type === 'image/jpeg' || file.type === 'image/png';
+      const isLt1M = file.size / 1024 / 1024;
+      if (!isJpgPng) {
+        this.$message.error('上传头像图片只能是 jpg/jpeg 或 png 格式!');
+      }
+      if (!isLt1M) {
+        this.$message.error('上传头像图片大小不能超过 1MB!');
+      }
+      return isJpgPng && isLt1M;
     }
   }
 }
 </script>
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
+</style>

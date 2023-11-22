@@ -86,7 +86,7 @@
             controls-position="right"
           />
         </el-form-item>
-        <el-form-item label="是否免费" v-if="coursePrice != 0.00">
+        <el-form-item label="是否免费" v-if="coursePrice != 0.0">
           <el-radio-group v-model="video.isFree">
             <el-radio :label="true">免费试看</el-radio>
             <el-radio :label="false">收费</el-radio>
@@ -145,7 +145,7 @@
           type="primary"
           @click="submit"
           style="margin-left: 50px; padding: 12px"
-          >发布</el-button
+          >发布课程</el-button
         >
       </el-form-item>
     </el-form>

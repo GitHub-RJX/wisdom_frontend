@@ -1,7 +1,7 @@
 <template>
   <div class="guli-player">
     <div class="head">
-      <a href="#" title="智慧教育">
+      <a href="http://localhost:3000" title="智慧教育">
         <img
           class="logo"
           src="~/assets/img/wisdom.png"

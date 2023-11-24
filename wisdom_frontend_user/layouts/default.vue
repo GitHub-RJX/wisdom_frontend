@@ -3,7 +3,7 @@
     <header id="header">
       <section class="container">
         <h1 id="logo">
-          <a href="#" title="智慧教育">
+          <a href="http://localhost:3000" title="智慧教育">
             <img src="~/assets/img/wisdom.png" width="100%" alt="智慧教育" />
           </a>
         </h1>
@@ -19,7 +19,7 @@
               <a>讲师</a>
             </router-link>
             <router-link to="/article" tag="li" active-class="current">
-              <a>讨论(TODO)</a>
+              <a>反馈(TODO)</a>
             </router-link>
             <!-- <router-link to="/qa" tag="li" active-class="current">
               <a>反馈(TODO)</a>

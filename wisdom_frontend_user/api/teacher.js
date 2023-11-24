@@ -14,6 +14,12 @@ export default {
       method: 'get'
     })
   },
+  getTeacherListByLevel(current, size, level) {
+    return request({
+      url: `/edu/front/teacher/getByLevel/${current}/${size}/${level}`,
+      method: 'get'
+    })
+  },
   //讲师详情的方法
   getTeacherInfo(id) {
     return request({

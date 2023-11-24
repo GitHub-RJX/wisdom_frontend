@@ -1,6 +1,5 @@
 <template>
   <div id="aCoursesList" class="bg-fa of">
-    <!-- /课程列表 开始 -->
     <section class="container">
       <header class="comm-title">
         <h2 class="fl tac">
@@ -11,7 +10,7 @@
         <section class="c-s-dl">
           <dl>
             <dt>
-              <span class="c-999 fsize14">课程类别</span>
+              <span class="c-999 fsize14">课程一级分类</span>
             </dt>
             <dd class="c-s-dl-li">
               <ul class="clearfix">
@@ -24,9 +23,9 @@
               </ul>
             </dd>
           </dl>
-          <dl>
+          <dl v-show="this.oneIndex != -1">
             <dt>
-              <span class="c-999 fsize14"></span>
+              <span class="c-999 fsize14">课程二级分类</span>
             </dt>
             <dd class="c-s-dl-li">
               <ul class="clearfix">
@@ -177,7 +176,8 @@ export default {
 
     //3 分页切换的方法
     gotoPage(page) {
-      courseApi.getCourseList(page, 8, this.searchObj).then(response => {
+      courseApi.getCourseList(page, 8, this.searchObj)
+      .then(response => {
         this.data = response.data.data
       })
     },
@@ -186,16 +186,15 @@ export default {
     searchOne(subjectParentId, index) {
       //把传递index值赋值给oneIndex,为了active样式生效
       this.oneIndex = index
-
       this.twoIndex = -1
-      this.searchObj.subjectId = ""
-      this.subjectList = []
 
       //把一级分类点击id值，赋值给searchObj
       this.searchObj.subjectParentId = subjectParentId
+      this.searchObj.subjectId = ""
       //点击某个一级分类进行条件查询
       this.gotoPage(1)
-
+      
+      this.subjectList = []
       //拿着点击一级分类id 和 所有一级分类id进行比较，
       //如果id相同，从一级分类里面获取对应的二级分类
       for (let i = 0; i < this.subjectParentList.length; i++) {
@@ -272,6 +271,7 @@ export default {
 <style scoped>
 .active {
   background: #bdbdbd;
+  border-radius: 8px;
 }
 
 .hide {

@@ -1,18 +1,37 @@
 <template>
   <div id="aCoursesList" class="bg-fa of">
-    <!-- 讲师列表 开始 -->
     <section class="container">
-      <header class="comm-title all-teacher-title">
+      <header class="comm-title">
         <h2 class="fl tac">
           <span class="c-333">全部讲师</span>
         </h2>
-        <section class="c-tab-title">
-          <a id="subjectAll" title="全部" href="#">全部</a>
-          <!-- <c:forEach var="subject" eduTeacherList="${subjectList }">
-                            <a id="${subject.subjectId}" title="${subject.subjectName }" href="javascript:void(0)" onclick="submitForm(${subject.subjectId})">${subject.subjectName }</a>
-          </c:forEach>-->
-        </section>
       </header>
+      <section class="c-sort-box">
+        <section class="c-s-dl">
+          <dl>
+            <dt>
+              <span class="c-999 fsize14">讲师头衔</span>
+            </dt>
+            <dd class="c-s-dl-li">
+              <ul class="clearfix">
+                <li>
+                  <a title="全部" href="#" @click="getAllTeacher()">全部</a>
+                </li>
+                <li
+                  v-for="(item, index) in teacherLevelList"
+                  :key="index"
+                  :class="{ active: selectIndex == index }"
+                >
+                  <a :title="item.title" href="#" @click="search(index)">{{
+                    item
+                  }}</a>
+                </li>
+              </ul>
+            </dd>
+          </dl>
+        </section>
+      </section>
+      <section class="c-tab-title"></section>
       <section class="c-sort-box unBr">
         <div>
           <!-- /无数据提示 开始-->
@@ -28,11 +47,7 @@
               <li v-for="teacher in data.eduTeacherList" :key="teacher.id">
                 <section class="i-teach-wrap">
                   <div class="i-teach-pic">
-                    <a
-                      :href="'/teacher/' + teacher.id"
-                      :title="teacher.name"
-                     
-                    >
+                    <a :href="'/teacher/' + teacher.id" :title="teacher.name">
                       <img :src="teacher.avatar" :alt="teacher.name" />
                     </a>
                   </div>
@@ -40,7 +55,6 @@
                     <a
                       :href="'/teacher/' + teacher.id"
                       :title="teacher.name"
-                    
                       class="fsize18 c-666"
                       >{{ teacher.name }}</a
                     >
@@ -69,7 +83,6 @@
               @click.prevent="gotoPage(1)"
               >首页</a
             >
-
             <a
               :class="{ undisable: !data.hasPrevious }"
               href="#"
@@ -77,20 +90,18 @@
               @click.prevent="gotoPage(data.current - 1)"
               >&lt;</a
             >
-
             <a
               v-for="page in data.pages"
               :key="page"
               :class="{
                 current: data.current == page,
-                undisable: data.current == page,
+                undisable: data.current == page
               }"
               :title="'第' + page + '页'"
               href="#"
               @click.prevent="gotoPage(page)"
               >{{ page }}</a
             >
-
             <a
               :class="{ undisable: !data.hasNext }"
               href="#"
@@ -98,7 +109,6 @@
               @click.prevent="gotoPage(data.current + 1)"
               >&gt;</a
             >
-
             <a
               :class="{ undisable: !data.hasNext }"
               href="#"
@@ -106,7 +116,6 @@
               @click.prevent="gotoPage(data.pages)"
               >末页</a
             >
-
             <div class="clear" />
           </div>
         </div>
@@ -118,26 +127,58 @@
   </div>
 </template>
 <script>
-import teacherApi from '@/api/teacher'
+import teacherApi from "@/api/teacher";
 export default {
   //异步调用，调用一次
   //params: 相当于之前 this.$route.params.id  等价  params.id
   asyncData({ params, error }) {
-    return teacherApi.getTeacherList(1, 8)
-      .then(response => {
-        //this.data = response.data.data
-        return { data: response.data.data }
-      })
+    return teacherApi.getTeacherList(1, 8).then(response => {
+      //this.data = response.data.data
+      return { data: response.data.data };
+    });
+  },
+  data() {
+    return {
+      page: 1, //当前页
+      data: {}, //讲师列表
+      teacherLevelList: ["初级讲师", "高级讲师", "首席讲师"], // 讲师头衔列表
+      searchObj: {}, // 查询表单对象
+      selectIndex: -1
+    };
   },
   methods: {
     //分页切换的方法
     //参数是页码数
     gotoPage(page) {
-      teacherApi.getTeacherList(page, 8)
-        .then(response => {
-          this.data = response.data.data
-        })
-    }
+      teacherApi.getTeacherList(page, 8).then(response => {
+        this.data = response.data.data;
+      });
+    },
+    getAllTeacher() {
+      this.selectIndex = -1
+      this.searchObj = {}
+      this.gotoPage(1)
+    },
+    search(index) {
+      this.selectIndex = index
+      teacherApi.getTeacherListByLevel(1, 8, index).then(response => {
+        this.data = response.data.data;
+      });
+    },
   }
 };
 </script>
+<style scoped>
+.active {
+  background: #bdbdbd;
+  border-radius: 8px;
+}
+
+.hide {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+</style>

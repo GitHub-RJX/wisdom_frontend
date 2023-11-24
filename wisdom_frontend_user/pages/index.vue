@@ -171,18 +171,18 @@ export default {
       swiperOption: {
         //配置分页
         pagination: {
-          el: ".swiper-pagination", //分页的dom节点
+          el: ".swiper-pagination" //分页的dom节点
         },
         //配置导航
         navigation: {
           nextEl: ".swiper-button-next", //下一页dom节点
-          prevEl: ".swiper-button-prev", //前一页dom节点
-        },
+          prevEl: ".swiper-button-prev" //前一页dom节点
+        }
       },
       //banner数组
       bannerList: [],
       courseList: [],
-      teacherList: [],
+      teacherList: []
     };
   },
   created() {
@@ -195,18 +195,18 @@ export default {
   methods: {
     //查询热门课程和名师
     getHotCourse() {
-      course.getFrontCourseList().then((response) => {
+      course.getFrontCourseList().then(response => {
         this.courseList = response.data.data;
       });
     },
     getHotTeacher() {
-      teacher.getFrontTeacherList().then((response) => {
+      teacher.getFrontTeacherList().then(response => {
         this.teacherList = response.data.data;
       });
     },
     //查询banner数据
     getBannerList() {
-      banner.getAllBannerUser().then((response) => {
+      banner.getAllBannerUser().then(response => {
         this.bannerList = response.data.data;
       });
     },
@@ -215,7 +215,7 @@ export default {
     },
     gotoTeachers() {
       this.$router.push({ path: "/teacher" });
-    },
-  },
+    }
+  }
 };
 </script>
